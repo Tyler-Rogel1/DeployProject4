@@ -3,6 +3,11 @@ let editId = null;
 let overlay = document.querySelector("#overlay");
 overlay.style.display = "none";
 let showReviewInputs = document.querySelector("#show-review-inputs");
+
+
+const apiUrl = window.location.protocol === 'file:' 
+? '${apiUrl}' //localhost during development
+: ''; //production api url
 showReviewInputs.onclick = function(){
     overlay.style.display = "flex";
     addReviewButton.style.display = "block";
@@ -76,7 +81,7 @@ function addMovieReview(data){
         date = date.replace("T", " ")
         let editData = "name="+encodeURIComponent(inputMovieName.value) + "&review="+encodeURIComponent(inputMovieReview.value)+ "&rating="+encodeURIComponent(inputMovieRating.value)+ "&date="+encodeURIComponent(date)+ "&director="+encodeURIComponent(inputMovieDirector.value)
         // send new review value to the server
-        fetch(`http://localhost:8080/reviews/${editId}`, {
+        fetch(`${apiUrl}/reviews/${editId}`, {
             method: "PUT",
             body: editData,
             headers: {
@@ -99,7 +104,7 @@ function addMovieReview(data){
             
             let deleteId = data["id"]
             // send new review value to the server
-            fetch(`http://localhost:8080/reviews/${deleteId}`, {
+            fetch(`${apiUrl}/reviews/${deleteId}`, {
             method: "DELETE",
             body: "",
             headers: {
@@ -115,7 +120,7 @@ function addMovieReview(data){
     }
 }
 function loadReviewsFromServer() {
-    fetch("http://localhost:8080/reviews")
+    fetch("${apiUrl}/reviews")
         .then(function(response){
         response.json()
         .then(function(data){
@@ -145,7 +150,7 @@ function addNewReview(){
     let data = "name="+encodeURIComponent(inputMovieName.value) + "&review="+encodeURIComponent(inputMovieReview.value)+ "&rating="+encodeURIComponent(inputMovieRating.value)+ "&date="+encodeURIComponent(date)+ "&director="+encodeURIComponent(inputMovieDirector.value)
     // send new review value to the server
     console.log(data)
-    fetch("http://localhost:8080/reviews", {
+    fetch("${apiUrl}/reviews", {
         method: "POST",
         body: data,
         headers: {
